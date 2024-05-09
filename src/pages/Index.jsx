@@ -7,14 +7,24 @@ const Index = () => {
   const toast = useToast();
 
   const evaluateHand = () => {
-    // This is a placeholder for the poker logic
-    const advice = "Call"; // Default advice, replace with real logic
+    let advice = "Call"; // Default advice
+    const totalCards = hand + ' ' + communityCards;
+    const cardCount = totalCards.split(' ').filter(card => card).length;
+
+    if (cardCount < 5) {
+        advice = "Fold";
+    } else if (cardCount >= 5 && cardCount <= 7) {
+        advice = "Call";
+    } else if (cardCount > 7) {
+        advice = "Raise";
+    }
+
     toast({
-      title: "Poker Advice",
-      description: `Based on your hand and the community cards, you should: ${advice}`,
-      status: "info",
-      duration: 9000,
-      isClosable: true,
+        title: "Poker Advice",
+        description: `Based on your hand and the community cards, you should: ${advice}`,
+        status: "info",
+        duration: 9000,
+        isClosable: true,
     });
   };
 
