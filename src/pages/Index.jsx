@@ -1,5 +1,9 @@
 import { Container, VStack, Text, Input, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+function calculateWinningProbability(hand, communityCards) {
+    // Placeholder for probability calculation logic
+    return 0.5; // This should be replaced with actual logic
+}
 
 const Index = () => {
   const [hand, setHand] = useState("");
@@ -7,21 +11,19 @@ const Index = () => {
   const toast = useToast();
 
   const evaluateHand = () => {
-    let advice = "Call"; // Default advice
-    const totalCards = hand + ' ' + communityCards;
-    const cardCount = totalCards.split(' ').filter(card => card).length;
-
-    if (cardCount < 5) {
+    const probability = calculateWinningProbability(hand, communityCards);
+    let advice;
+    if (probability < 0.33) {
         advice = "Fold";
-    } else if (cardCount >= 5 && cardCount <= 7) {
+    } else if (probability >= 0.33 && probability <= 0.66) {
         advice = "Call";
-    } else if (cardCount > 7) {
+    } else {
         advice = "Raise";
     }
 
     toast({
         title: "Poker Advice",
-        description: `Based on your hand and the community cards, you should: ${advice}`,
+        description: `Probability of winning: ${Math.round(probability * 100)}%. Based on your hand and the community cards, you should: ${advice}`,
         status: "info",
         duration: 9000,
         isClosable: true,
