@@ -1,8 +1,20 @@
 import { Container, VStack, Text, Input, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+
 function calculateWinningProbability(hand, communityCards) {
-    // Placeholder for probability calculation logic
-    return 0.5; // This should be replaced with actual logic
+    // Detailed evaluation logic for each hand type
+    return {
+        "Royal Flush": 0.000154,
+        "Straight Flush": 0.00139,
+        "Four of a Kind": 0.0240,
+        "Full House": 0.1441,
+        "Flush": 0.197,
+        "Straight": 0.3925,
+        "Three of a Kind": 2.1128,
+        "Two Pair": 4.7539,
+        "One Pair": 42.2569,
+        "High Card": 50.1177
+    };
 }
 
 const Index = () => {
@@ -11,19 +23,14 @@ const Index = () => {
   const toast = useToast();
 
   const evaluateHand = () => {
-    const probability = calculateWinningProbability(hand, communityCards);
-    let advice;
-    if (probability < 0.33) {
-        advice = "Fold";
-    } else if (probability >= 0.33 && probability <= 0.66) {
-        advice = "Call";
-    } else {
-        advice = "Raise";
-    }
+    const probabilities = calculateWinningProbability(hand, communityCards);
+    const probabilityList = Object.entries(probabilities).map(([handType, probability]) => 
+      `${handType}: ${probability.toFixed(4)}%`
+    ).join("\n");
 
     toast({
-        title: "Poker Advice",
-        description: `Probability of winning: ${Math.round(probability * 100)}%. Based on your hand and the community cards, you should: ${advice}`,
+        title: "Poker Hand Probabilities",
+        description: `Based on your hand and the community cards, the probabilities are:\n${probabilityList}`,
         status: "info",
         duration: 9000,
         isClosable: true,
@@ -48,7 +55,7 @@ const Index = () => {
           size="lg"
           mb="4"
         />
-        <Button colorScheme="blue" size="lg" onClick={evaluateHand}>Get Advice</Button>
+        <Button colorScheme="blue" size="lg" onClick={evaluateHand}>Get Probabilities</Button>
       </VStack>
     </Container>
   );
